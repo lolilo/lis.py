@@ -19,7 +19,7 @@ class Env(dict):
         if var in self:
             return self
         else: 
-            self.outer.find(var)
+            return self.outer.find(var)
             # Return the lowest index in the string where substring sub is found, 
             # such that sub is contained in the slice s[start:end]...a string? Huh?
 
@@ -104,6 +104,8 @@ def eval(x, env=global_env):
         # So we could just replace env.find(x)[x] with env[x] for the same result...right?
         # the .find is simply to check if x exists in the dictionary...
 
+        # Okay, you are retarded. .find is a function defined in the Env class here. 
+
     # constant literal
     elif not isa(x, list):
         print "%r is not a list; is is of type %r" % (x, type(x))
@@ -138,9 +140,12 @@ def eval(x, env=global_env):
         (_, vars, exp) = x
         print 'vars', vars
         print 'exp', exp
+        return lambda *args: eval(exp, Env(parms=vars, args=args, outer=env))
+
+
         # new_env_dict = dict(env.items() + vars.items() + args.items())
         # updated_env = Env(new_env_dict)
-        return lambda *args: eval(exp, Env(dict(env.items() + vars.items() + args.items())))
+        # return lambda *args: eval(exp, Env(dict(env.items() + vars.items() + args.items())))
         # HOW CAN I SPLIT THIS UP. I DON'T KNOW HOW TO ACCECSS ARGS OTHERWISE.
 
     # sequencing (being exp*)
