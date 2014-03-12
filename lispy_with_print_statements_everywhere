@@ -91,21 +91,36 @@ def eval(x, env=global_env):
     # variable reference
     # if x is a str
     if isa(x, Symbol):
+        print '%r is a string' % x
+        print 'this is env!', env
+        print 'env is of type %r' % type(env)
         return env.find(x)[x]
         # env.find is the same as env.__getitem__
-    
+        # err...maybe not? It returns a <built-in function ___> object
+
+        # >>> global_env['*']
+        # <built-in function mul>
+        # >>> global_env.find('*') returns the global_env dictionary. 
+        # So we could just replace env.find(x)[x] with env[x] for the same result...right?
+        # the .find is simply to check if x exists in the dictionary...
+
     # constant literal
     elif not isa(x, list):
+        print "%r is not a list; is is of type %r" % (x, type(x))
         return x
 
     # (quote exp)
     elif x[0] == 'quote':
+        print 'quote'
         (_, exp) = x # _ is a character we use as a variable.
         return exp
 
     # conditional (if test conseq alt)
     elif x[0] == 'if':
+        print 'if'
         (_, test, conseq, alt) = x
+        return eval((conseq if eval(test, env) else alt), env)
+        # value_when_true if condition else value_when_false
 
     # assignment (set! var exp)
     elif x[0] == 'set!':
@@ -114,13 +129,19 @@ def eval(x, env=global_env):
 
     # (define var exp)
     elif x[0] == 'define':
+        print 'define!('
         (_, var, exp) = x
         env[var] = eval(exp, env) # adds var to the global environment dictionary
 
     # procedure (lambda (var*) exp)
     elif x[0] == 'lambda':
         (_, vars, exp) = x
-        return lambda *args: eval(exp, Env(vars, args, env))
+        print 'vars', vars
+        print 'exp', exp
+        # new_env_dict = dict(env.items() + vars.items() + args.items())
+        # updated_env = Env(new_env_dict)
+        return lambda *args: eval(exp, Env(dict(env.items() + vars.items() + args.items())))
+        # HOW CAN I SPLIT THIS UP. I DON'T KNOW HOW TO ACCECSS ARGS OTHERWISE.
 
     # sequencing (being exp*)
     elif x[0] == 'begin':
@@ -129,10 +150,13 @@ def eval(x, env=global_env):
         return val # val will keep being reassigned, so we only return the last val?
 
     else:
+        print 'procedure call!'
         # procedure call (proc exp*)
         exps = [eval(exp, env) for exp in x] # list of evaluated exp
         proc = exps.pop(0) # Are we arbitrarily choosing the first element of the exps list?
         # Nope. Recursive call of sorts...solidify this later.
+        print 'procedure is', proc
+        print proc(*exps)
         return proc(*exps) # arbitrary amount of exps, which will be recursively evaluated
 
 # alias
@@ -192,9 +216,11 @@ def atom(token):
 def to_string(exp):
     # convert Python object back into Lisp-readable string
     if isa(exp, list):
+        # print 'to_string on a list %r' % exp
         return '(' + ' '.join(map(to_string, exp)) + ')'
     else:
-        str(exp) # called via the map function above. fancy.
+        # print 'to_string on a non-list %r' % exp
+        return str(exp) # called via the map function above. fancy. 3/12 - what was I talking about...
         # can simply write .join(map(str(exp), exp)) above? 
 
 def repl():
@@ -204,8 +230,9 @@ def repl():
         user_input = raw_input('lis.py > ')
         if user_input:
             val = eval(parse(user_input))
+            print 'val in the repl is %r' % val
             if val is not None:
-            # if val:
+                print val
                 print to_string(val)
 
 # print global_env
