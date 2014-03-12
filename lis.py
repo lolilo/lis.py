@@ -13,6 +13,7 @@ class Env(dict):
         # Find the innermost Env where var appears.
         # Env.find finds the right environment according to lexical scoping rules.
 
+
         # return self if var in self else self.outer.find(var)
         # weird syntax?
         if var in self:
@@ -66,10 +67,18 @@ global_env = add_globals(Env())
 
 # Evaluate an expression x in an environment env.
 def eval(x, env=global_env):
+    print 'env!', env
+    print """
+
+
+
+    """
+    print global_env
     
     # variable reference
     if isa(x, Symbol):
         return env.find(x)[x]
+        # env.find is the same as env.__getitem__
     
     # constant literal
     elif not isa(x, list):
@@ -112,11 +121,9 @@ def eval(x, env=global_env):
         # Nope. Recursive call of sorts...solidify this later.
         return proc(*exps) # arbitrary amount of exps, which will be recursively evaluated
 
-
+# alias
 isa = isinstance # isinstance(9, int) --> True, isinstance(9, str) --> False
 Symbol = str
-
-
 
 """          parse, read, user interaction           """
 
@@ -125,5 +132,68 @@ Symbol = str
 # and syntactic analysis, in which the tokens are assembled into an internal representation. 
 # The Lispy tokens are parentheses, symbols (such as set! or x), and numbers (such as 2).
 
+def read(s):
+    # read a Scheme expression from a string
+    return read_from(tokenize(s))
 
+parse = read # Why? Why not def parse(s)?
 
+def tokenize(s):
+    # convert a string into a list of tokens
+    # add white space in between parentheses and split on white space
+    return s.replace('(', ' ( ').replace(')', ' ) ').split()
+
+def read_from(tokens):
+    # read an expression from a sequence of tokens
+    if len(tokens) == 0:
+        raise SyntaxError('unexpect EOF while reading')
+    token = tokens.pop(0)
+
+    if '(' == token:
+        l = []
+        while tokens[0] != ')':
+            l.append(read_from(tokens))
+        tokens.pop(0) # pop off ')'
+        return l
+
+    # account for '()'
+    elif ')' == token:
+        raise SyntaxError('unexpected token )')
+
+    else:
+        return atom(token)
+
+def atom(token):
+    # numbers become numbers
+    try:
+        return int(token)
+    except ValueError:
+        try:
+            return float(token)
+
+        # every other token is a symbol
+        except ValueError:
+            return Symbol(token)
+
+def to_string(exp):
+    # convert Python object back into Lisp-readable string
+    if isa(exp, list):
+        return '(' + ' '.join(map(to_string, exp)) + ')'
+    else:
+        str(exp) # called via the map function above. fancy.
+        # can simply write .join(map(str(exp), exp)) above? 
+
+def repl():
+
+    print global_env
+    # prompt-read-eval-print loop
+    while True:
+        # able to push enter infinitely
+        user_input = raw_input('lis.py > ')
+        if user_input:
+            val = eval(parse(user_input))
+            if val is not None:
+            # if val:
+                print to_string(val)
+
+# print global_env
