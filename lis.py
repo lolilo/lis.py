@@ -6,7 +6,7 @@
 class Env(dict):
     # Env is a subclass of dict.
     # An environment is a dictionary of {'var': val} pairs with an outer Env.
-    def __init__(self, parms=(), outer=None):
+    def __init__(self, parms=(), args=(), outer=None):
         self.update(zip(parms, args))
         self.outer = outer
     def find(self, var):
@@ -22,44 +22,44 @@ class Env(dict):
             # Return the lowest index in the string where substring sub is found, 
             # such that sub is contained in the slice s[start:end]...a string? Huh?
 
-    def add_global(env):
-        # Add Scheme standard procedures to an environment.
-        import math, operator as op
-        env.update(vars(math)) # vars(object) is equivalent to object.__dict__
-        env.update({
-                '+' : op.add, 
-                '-' : op.sub, 
-                '*' : op.mul, 
-                '/' : op.div, 
-                'not' : op.not_,
-                '>' : op.gt,
-                '<' : op.lt,
-                '>=' : op.ge,
-                '<=' : op.le,
-                '=' : op.eq,
-                'equal?' : op.eq, # values are equal
-                'eq?' : op.is_, # point to the same object in memory
-                'length' : len,
+def add_globals(env):
+    # Add Scheme standard procedures to an environment.
+    import math, operator as op
+    env.update(vars(math)) # vars(object) is equivalent to object.__dict__
+    env.update({
+            '+' : op.add, 
+            '-' : op.sub, 
+            '*' : op.mul, 
+            '/' : op.div, 
+            'not' : op.not_,
+            '>' : op.gt,
+            '<' : op.lt,
+            '>=' : op.ge,
+            '<=' : op.le,
+            '=' : op.eq,
+            'equal?' : op.eq, # values are equal
+            'eq?' : op.is_, # point to the same object in memory
+            'length' : len,
 
-                # Lambda forms (lambda expressions) have the same syntactic position as
-                # expressions.  They are a shorthand to create anonymous functions; the
-                # expression ``lambda arguments: expression`` yields a function object.
+            # Lambda forms (lambda expressions) have the same syntactic position as
+            # expressions.  They are a shorthand to create anonymous functions; the
+            # expression ``lambda arguments: expression`` yields a function object.
 
-                'cons' : lambda x, y : [x] + y, # what the shit is this
-                'car' : lambda x : x[0],
-                'cdr' : lambda x : x[1:],
-                'append' : op.add, # this works for Scheme, I guess? 
-                'list' : lambda *x : list(x),
-                # list() -> new empty list
-                # list(iterable) -> new list initialized from iterable's items
-                # syntactic sugar. l = [] is the same as l = list()
-                'list?' : lambda x : isa(x, list),
-                'null?' : lambda x : x == [],
-                'symbol?' : lambda x : isa(x, Symbol)    
-            })
-        return env
+            'cons' : lambda x, y : [x] + y, # what the shit is this
+            'car' : lambda x : x[0],
+            'cdr' : lambda x : x[1:],
+            'append' : op.add, # this works for Scheme, I guess? 
+            'list' : lambda *x : list(x),
+            # list() -> new empty list
+            # list(iterable) -> new list initialized from iterable's items
+            # syntactic sugar. l = [] is the same as l = list()
+            'list?' : lambda x : isa(x, list),
+            'null?' : lambda x : x == [],
+            'symbol?' : lambda x : isa(x, Symbol)    
+        })
+    return env
 
-    global_env = add_globals(Env())
+global_env = add_globals(Env())
 
 
 """          eval           """
@@ -119,4 +119,11 @@ Symbol = str
 
 
 """          parse, read, user interaction           """
+
+# Parsing is traditionally separated into two parts: lexical analysis, 
+# in which the input character string is broken up into a sequence of tokens, 
+# and syntactic analysis, in which the tokens are assembled into an internal representation. 
+# The Lispy tokens are parentheses, symbols (such as set! or x), and numbers (such as 2).
+
+
 
