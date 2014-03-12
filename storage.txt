@@ -1,0 +1,31 @@
+{'equal?': <built-in function eq>, 'list?': <function <lambda> at 0x7ff51637aa28>, '*': <built-in function mul>, '>=': <built-in function ge>, 'pow': <built-in function pow>, 'fsum': <built-in function fsum>, 'cons': <function <lambda> at 0x7ff51637a848>, 'cosh': <built-in function cosh>, 'ldexp': <built-in function ldexp>, 'area': <function <lambda> at 0x7ff51637aed8>, 'hypot': <built-in function hypot>, '/': <built-in function div>, 'cdr': <function <lambda> at 0x7ff51637a938>, 'acosh': <built-in function acosh>, 'tan': <built-in function tan>, 'append': <built-in function add>, 'asin': <built-in function asin>, 'isnan': <built-in function isnan>, 'log': <built-in function log>, 'fabs': <built-in function fabs>, 'floor': <built-in function floor>, '+': <built-in function add>, 'atanh': <built-in function atanh>, '-': <built-in function sub>, 'length': <built-in function len>, 'sqrt': <built-in function sqrt>, '__package__': None, 'frexp': <built-in function frexp>, 'degrees': <built-in function degrees>, 'pi': 3.141592653589793, 'log10': <built-in function log10>, '__doc__': 'This module is always available.  It provides access to the\nmathematical functions defined by the C standard.', '>': <built-in function gt>, 'asinh': <built-in function asinh>, '<=': <built-in function le>, 'fmod': <built-in function fmod>, 'atan': <built-in function atan>, 'factorial': <built-in function factorial>, 'copysign': <built-in function copysign>, 'cos': <built-in function cos>, 'ceil': <built-in function ceil>, 'atan2': <built-in function atan2>, 'isinf': <built-in function isinf>, 'sinh': <built-in function sinh>, 'not': <built-in function not_>, '__name__': 'math', 'symbol?': <function <lambda> at 0x7ff51637ab18>, 'trunc': <built-in function trunc>, 'expm1': <built-in function expm1>, 'e': 2.718281828459045, 'eq?': <built-in function is_>, 'tanh': <built-in function tanh>, 'car': <function <lambda> at 0x7ff51637a8c0>, 'null?': <function <lambda> at 0x7ff51637aaa0>, 'list': <function <lambda> at 0x7ff51637a9b0>, 'radians': <built-in function radians>, 'sin': <built-in function sin>, 'lgamma': <built-in function lgamma>, 'erf': <built-in function erf>, 'erfc': <built-in function erfc>, 'modf': <built-in function modf>, '=': <built-in function eq>, 'exp': <built-in function exp>, 'acos': <built-in function acos>, 'log1p': <built-in function log1p>, '<': <built-in function lt>, 'gamma': <built-in function gamma>}
+
+
+(define area (lambda (r) (* 3.141592653 (* r r))))
+
+
+(define count (lambda (item L) (if L (+ (equal? item (car L)) (count item (cdr L))) 0)))
+
+^ this is recursive and crazy. T__T
+
+
+
+>>> repl()
+lis.py> (define area (lambda (r) (* 3.141592653 (* r r))))
+lis.py> (area 3)
+28.274333877
+lis.py> (define fact (lambda (n) (if (<= n 1) 1 (* n (fact (- n 1))))))
+lis.py> (fact 10)
+3628800
+lis.py> (fact 100)
+9332621544394415268169923885626670049071596826438162146859296389521759999322991
+5608941463976156518286253697920827223758251185210916864000000000000000000000000
+lis.py> (area (fact 10))
+4.1369087198e+13
+lis.py> (define first car)
+lis.py> (define rest cdr)
+lis.py> (define count (lambda (item L) (if L (+ (equal? item (first L)) (count item (rest L))) 0)))
+lis.py> (count 0 (list 0 1 2 3 0 0))
+3
+lis.py> (count (quote the) (quote (the more the merrier the bigger the better)))
+4
