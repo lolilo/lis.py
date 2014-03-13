@@ -93,7 +93,9 @@ def eval(x, env=global_env):
     # variable reference
     # if x is a str
     if isa(x, Symbol):
-        print '%r is a Symbol; this will evaluate to %r' % (x, env.find(x)[x])
+        print '%r is a Symbol ' % x,
+        print 'that evaluates to %r' % env.find(x)[x]
+        # print '%r is a Symbol; this will evaluate to %r' % (x, env.find(x)[x])
         return env.find(x)[x]
         # env.find is the same as env.__getitem__
         # err...maybe not? It returns a <built-in function ___> object
@@ -181,12 +183,12 @@ Symbol = str
 # and syntactic analysis, in which the tokens are assembled into an internal representation. 
 # The Lispy tokens are parentheses, symbols (such as set! or x), and numbers (such as 2).
 
-def read(s):
+def parse(s):
     # read a Scheme expression from a string
     print 'read the Scheme expression', s
     return read_from(tokenize(s))
 
-parse = read # Why? Why not def parse(s)?
+# parse = read # Why? Why not def parse(s)?
 
 def tokenize(s):
     # convert a string into a list of tokens
