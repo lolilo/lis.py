@@ -25,10 +25,15 @@ class Env(dict):
 
 def add_globals(env):
     # Add Scheme standard procedures to an environment.
-    import math, operator as op
+    import operator as op
     import arithmetic as art
 
-    env.update(vars(math)) # vars(object) is equivalent to object.__dict__
+    # I feel like I shouldn't update all the things like this? 
+    # Limit env to ones defined below.
+    
+
+    # env.update(vars(math)) # vars(object) is equivalent to object.__dict__
+    
     env.update({
 
             # art file allows for *args
@@ -229,10 +234,23 @@ def repl():
 
 
                 # need JSON objects in a 'trace' list. 
+
+                # JSON notation has only a handful of native datatypes 
+                # (objects, arrays, strings, numbers, booleans, and null), 
+                # so anything serialized in JSON needs to be expressed as one of these types.
                 
                 print """
 
                 """
+
+                # convert global_env values to strings, since JSON cannot serialize functions
+                for i in global_env.iteritems():
+                    key = i[0]
+                    # global_env_value = global_env[key]
+                    global_env[key] = str(global_env[key])
+                
+                print global_env
+
                 print json.dumps(global_env, indent=2)
                 # global_env_entry = {'global_env' : global_env}
                 # trace.append(global_env_entry)
@@ -247,3 +265,4 @@ def main():
 
 if __name__ == "__main__":
     repl()
+
