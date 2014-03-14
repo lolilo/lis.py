@@ -27,13 +27,10 @@ def add_globals(env):
     # Add Scheme standard procedures to an environment.
     import operator as op
     import arithmetic as art
-
+    # env.update(vars(math)) # vars(object) is equivalent to object.__dict__
     # I feel like I shouldn't update all the things like this? 
     # Limit env to ones defined below.
-    
 
-    # env.update(vars(math)) # vars(object) is equivalent to object.__dict__
-    
     env.update({
 
             # art file allows for *args
@@ -70,6 +67,7 @@ def add_globals(env):
         })
     return env
 
+# initialize global environment
 global_env = add_globals(Env())
 
 
@@ -147,6 +145,8 @@ def eval(x, env=global_env):
         # Nope. Recursive call of sorts...solidify this later.
         print 'procedure is', proc
         print 'exps is ', exps
+        print proc
+        print proc(*exps)
         return proc(*exps) # arbitrary amount of exps, which will be recursively evaluated
 
 # alias
@@ -221,41 +221,55 @@ def to_string(exp):
 def repl():
     # prompt-read-eval-print loop
 
-    trace = []
-
+    json_output = {"code" : None, "trace" : []}
 
     while True:
         # able to push enter infinitely
         user_input = raw_input('lis.py > ')
+        json_output["code"] = user_input
+
         if user_input:
+            # need JSON objects in a 'trace' list. 
+
+            # JSON notation has only a handful of native datatypes 
+            # (objects, arrays, strings, numbers, booleans, and null), 
+            # so anything serialized in JSON needs to be expressed as one of these types.
+            
+            print """
+
+            """
+
+            # convert global_env values to strings, since JSON cannot serialize functions
+            for i in global_env.iteritems():
+                key = i[0]
+                global_env[key] = str(global_env[key])
+            
+            # print global_env
+
+            print json.dumps(global_env, indent=3)
+            global_env_entry = {'global_env' : global_env}
+            json_output["trace"].append(global_env_entry)
+            print json_output
+
+            # evaluate user input -- single line for now
+            # instead of output being val, maybe have output be trace and extrat val from trace?
             val = eval(parse(user_input))
-            # print 'val in the repl is %r' % val
             if val is not None:
-
-
-                # need JSON objects in a 'trace' list. 
-
-                # JSON notation has only a handful of native datatypes 
-                # (objects, arrays, strings, numbers, booleans, and null), 
-                # so anything serialized in JSON needs to be expressed as one of these types.
-                
-                print """
-
-                """
-
-                # convert global_env values to strings, since JSON cannot serialize functions
-                for i in global_env.iteritems():
-                    key = i[0]
-                    # global_env_value = global_env[key]
-                    global_env[key] = str(global_env[key])
-                
-                print global_env
-
-                print json.dumps(global_env, indent=2)
-                # global_env_entry = {'global_env' : global_env}
-                # trace.append(global_env_entry)
-                print trace
                 print to_string(val)
+
+
+# {
+#     "global_env" : {},
+#     "current_env" : {},
+#     "all_other_env_ordered_from_global_downwards" : {},
+#     "func_name" : "",
+#     "stack_to_render" : [],
+#     "line" : 9,
+#     "event" : (step_line, return, define(?), etc.)
+# }
+
+
+
 
 
 
