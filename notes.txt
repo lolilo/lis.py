@@ -1,0 +1,71 @@
+##########################################################
+backend
+##########################################################
+
+interpreter will take source code of Scheme as input
+
+produce an execution trace as output
+standard Python debugger module (bdb) -- stops execution after every executed line and records run-time state
+
+trace is an ordered list of execution points, where each point contains the stae right before the line of code is about the execute
+
+` line number of the line that is about to execute
+` instruction type 
+    ordinary single step
+    exception
+    function call
+    function return
+` map of global variable names to current values at this execution point (stack, heap?)
+` program's output up to this execution point
+
+
+after execution terminates, backend encodes trace in JSON format, serializing Python data types into native JSON types with extra metadata tags
+
+
+account for potential breakage
+* infinite loops, excessively long traces -- limit executed lines to ~200-300 
+* implement sandboxing ~ some security measure for running untrusted code
+* database for code -- url generation for user sharing 
+
+##########################################################
+frontend
+##########################################################
+
+- user types in Scheme program
+- user clicks "visualize execusion" button -- frontend sends Scheme program to backend, backend returns JSON execution trace, frontend renders visualization in a GUI
+- After the initial webpage load, all interactions occur in
+the browser with no additional server calls; thus, stepping
+forwards and backwards refresh the display instantaneously.
+
+### Layout Heuristic
+Binary Tree
+###
+
+
+
+
+
+D3 - map execution trace objects to corresponding HTML elements
+
+
+
+
+
+
+### extras ###
+
+embed in webpage
+
+The entire visualizer GUI is encapsulated in
+a JavaScript ExecutionVisualizer class, so embedding it
+within a webpage takes only one line of code.
+
+var v = new ExecutionVisualizer(parentNode, trace)
+
+
+
+
+
+
+* test on different browser sizes/resolution, modile devices. How does it scale? 
+

@@ -1,0 +1,87 @@
+// What keys do I need in my JSON?
+
+
+// The trace is a JSON object with two fields: code is the string contents of the 
+// code to be visualized, and trace is the actual execution trace, 
+// which consists of a list of execution points.
+
+{
+    "global_env" : {},
+    "current_env" : {},
+    "all_other_env_ordered_from_global_downwards" : {},
+    "func_name" : "",
+    "stack_to_render" : [],
+    "line" : 9,
+    "event" : (step_line, return, define(?), etc.)
+}
+
+
+// #####################Python Tutor#########
+
+// frontend renders an execution point by simply looking at the contents of 
+// the corresponding execution point object, without consulting any of its neighbors.
+
+{
+  "code": "x = 5\ny = 10\nz = x + y\n\n", 
+  "trace": [
+    {
+      "ordered_globals": [], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {}, 
+      "heap": {}, 
+      "line": 1, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "x": 5
+      }, 
+      "heap": {}, 
+      "line": 2, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "y"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "y": 10, 
+        "x": 5
+      }, 
+      "heap": {}, 
+      "line": 3, 
+      "event": "step_line"
+    }, 
+    {
+      "ordered_globals": [
+        "x", 
+        "y", 
+        "z"
+      ], 
+      "stdout": "", 
+      "func_name": "<module>", 
+      "stack_to_render": [], 
+      "globals": {
+        "y": 10, 
+        "x": 5, 
+        "z": 15
+      }, 
+      "heap": {}, 
+      "line": 3, 
+      "event": "return"
+    }
+  ]
+}
+

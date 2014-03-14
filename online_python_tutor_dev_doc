@@ -1,0 +1,30 @@
+https://github.com/pgbovine/OnlinePythonTutor/
+
+
+
+This document is a starting point for anyone who wants to hack on Online Python Tutor
+https://github.com/pgbovine/OnlinePythonTutor/blob/master/v3/docs/developer-overview.md
+
+
+
+The frontend consists of:
+
+visualize.html
+css/opt-frontend.css
+js/opt-frontend.js
+css/pytutor.css
+js/pytutor.js
+<a bunch of auxiliary css and js files such as libraries>
+
+
+The backend consists of:
+
+pg_logger.py  - the main entry point to the OPT backend
+pg_encoder.py - encodes the trace format into JSON to send to frontend
+generate_json_trace.py - script to test the backend independent of the frontend
+
+
+~worry about these later
+app.yaml, pythontutor.py - files for deploying on Google App Engine
+web_exec.py - example CGI script for deploying backend on CGI-enabled webservers
+
