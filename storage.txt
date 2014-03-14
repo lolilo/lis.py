@@ -2,6 +2,7 @@
 
 
 (define area (lambda (r) (* 3.141592653 (* r r))))
+This needs the parentheses around r./ var -- (lambda (var...) exp)
 
 
 (define count (lambda (item L) (if L (+ (equal? item (car L)) (count item (cdr L))) 0)))

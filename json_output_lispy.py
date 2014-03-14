@@ -30,7 +30,6 @@ def add_globals(env):
 
     # I feel like I shouldn't update all the things like this? 
     # Limit env to ones defined below.
-    
 
     # env.update(vars(math)) # vars(object) is equivalent to object.__dict__
     
@@ -180,6 +179,8 @@ def read_from(tokens):
     if '(' == token:
 
         print '\n\nSTARTING A NEW NODE.'
+        # each node has its own environment -- must account for this later in eval
+        # could optimize this later to refer to later constructed nodes. Meh. 
 
 
         # initialize dictionary/object for each node
@@ -221,7 +222,6 @@ def atom(token):
     except ValueError:
         try:
             return float(token)
-
         # every other token is a symbol
         except ValueError:
             return Symbol(token)
@@ -243,6 +243,7 @@ def repl():
         user_input = raw_input('lis.py > ')
         # able to push enter infinitely
         if user_input:
+            # json_output will later be converted to a JSON object
             json_output = {
                 "code" : user_input, 
                 "trace" : []
@@ -253,12 +254,13 @@ def repl():
 
 
             val = eval(parse(user_input))
-            print 'NODE LIST', expression_trace
+            # print 'NODE LIST', expression_trace
 
-            json_expression_trace = json.dumps(expression_trace, indent=5)
-            print json_expression_trace
+            # if line defines a new function -- THIS IS TERRIBLE. FIX LATER.
+            if val is None:
 
-            # print 'val in the repl is %r' % val
+                json_expression_trace = json.dumps(expression_trace, indent=5)
+                # print json_expression_trace
             if val is not None:
 
                 # need JSON objects in a 'trace' list. 
@@ -285,8 +287,14 @@ def repl():
                 
                 json_output["trace"].append(dict(global_env=global_env_for_json_conversion))
                 
+                # this only works if the user only puts in one line, else will append/clash with other lines
+                
+                # json_expression_trace is a string...
+                json_output["trace"].append(dict(expression_trace=expression_trace))
                 json_object = json.dumps(json_output, indent=5)
-                print json_object
+
+                # print "\n json_output! ", json_output
+                print '\n json_object! ', json_object
                 print to_string(val)
 
 def main():
@@ -296,7 +304,5 @@ def main():
 if __name__ == "__main__":
     global expression_trace, node_count 
     expression_trace = []
-
-    
     repl()
 
