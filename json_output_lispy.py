@@ -162,7 +162,7 @@ Symbol = str
 
 def parse(s):
     # read a Scheme expression from a string
-    print 'read the Scheme expression', s
+    # print 'read the Scheme expression', s
     return read_from(tokenize(s))
 
 def tokenize(s):
@@ -174,14 +174,27 @@ def read_from(tokens):
     # read an expression from a sequence of tokens
     print 'reading from tokens %r' % tokens
     if len(tokens) == 0:
-        raise SyntaxError('unexpect EOF while reading')
+        raise SyntaxError('unexpected EOF while reading')
     token = tokens.pop(0)
 
     if '(' == token:
+
+        print '\n\nSTARTING A NEW NODE.'
+
+        # node_count += 1
+
+        # print 'expression_trace before append',expression_trace
+        expression_trace.append(tokens[0])
+        # print 'expression_trace after append', expression_trace
+
         expression_tokens = []
         while tokens[0] != ')':
             expression_tokens.append(read_from(tokens))
+
+        print "\n THIS IS ONE EXPRESSION OMG: ", expression_tokens
         print 'popping off the end, )'
+
+
         tokens.pop(0) # pop off ')' Popping is faster than deleting. What. 
 
         print 'returning expression tokens %r' % expression_tokens
@@ -222,15 +235,23 @@ def repl():
     # prompt-read-eval-print loop
 
     while True:
-        # able to push enter infinitely
         user_input = raw_input('lis.py > ')
+        # able to push enter infinitely
         if user_input:
             json_output = {
                 "code" : user_input, 
                 "trace" : []
                 }
 
+
+
+
+
             val = eval(parse(user_input))
+            print 'NODE LIST', expression_trace
+
+
+
 
             # print 'val in the repl is %r' % val
             if val is not None:
@@ -246,14 +267,21 @@ def repl():
                 """
 
                 # convert global_env values to strings, since JSON cannot serialize functions
+                
+                # I SEE WHAT'S HAPPENING. With only one line processed at a time, it's aight. 
+                # Then I'm changing the global_env values to strings...can't eval functions anymore.
+                # The Symbols point to strings. Shiiiit. 
+
+                global_env_for_json_conversion = {}
+
                 for i in global_env.iteritems():
                     key = i[0]
-                    # global_env_value = global_env[key]
-                    global_env[key] = str(global_env[key])
+                    global_env_for_json_conversion[key] = str(global_env[key])
                 
-                json_output["trace"].append(dict(global_env=global_env))
-                # print json_output
-                print json.dumps(json_output, indent=5)
+                json_output["trace"].append(dict(global_env=global_env_for_json_conversion))
+                
+                json_object = json.dumps(json_output, indent=5)
+                print json_object
                 print to_string(val)
 
 def main():
@@ -261,5 +289,9 @@ def main():
     pass
 
 if __name__ == "__main__":
+    global expression_trace, node_count 
+    expression_trace = []
+
+    
     repl()
 
