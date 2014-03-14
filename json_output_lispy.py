@@ -221,9 +221,6 @@ def to_string(exp):
 def repl():
     # prompt-read-eval-print loop
 
-
-
-
     while True:
         # able to push enter infinitely
         user_input = raw_input('lis.py > ')
@@ -233,14 +230,10 @@ def repl():
                 "trace" : []
                 }
 
-
             val = eval(parse(user_input))
-
-
 
             # print 'val in the repl is %r' % val
             if val is not None:
-
 
                 # need JSON objects in a 'trace' list. 
 
@@ -261,14 +254,7 @@ def repl():
                 json_output["trace"].append(dict(global_env=global_env))
                 # print json_output
                 print json.dumps(json_output, indent=5)
-
-                # print json.dumps(global_env, indent=5)
-
-                # global_env_entry = {'global_env' : global_env}
-                # trace.append(global_env_entry)
                 print to_string(val)
-
-
 
 def main():
     """In case we need this for something"""
