@@ -175,26 +175,31 @@ def read_from(tokens):
     print 'reading from tokens %r' % tokens
     if len(tokens) == 0:
         raise SyntaxError('unexpected EOF while reading')
-    token = tokens.pop(0)
+    token = tokens.pop(0) # pop off first token and assign to token for analysis
 
     if '(' == token:
 
         print '\n\nSTARTING A NEW NODE.'
 
-        # node_count += 1
 
-        # print 'expression_trace before append',expression_trace
-        expression_trace.append(tokens[0])
+        # initialize dictionary/object for each node
+        
+        new_token_leading_symbol = tokens[0]
+
+        # expression_trace.append(new_node)
         # print 'expression_trace after append', expression_trace
 
         expression_tokens = []
         while tokens[0] != ')':
             expression_tokens.append(read_from(tokens))
 
-        print "\n THIS IS ONE EXPRESSION OMG: ", expression_tokens
+        new_node = {new_token_leading_symbol : []}
+        expression_trace.append(new_node)
+        expression_trace[-1][new_token_leading_symbol].extend(expression_tokens)
+        # print '\n THIS IS EXPRESSION_TRACE after appending new node: ', expression_trace
+        # print "\n THIS IS ONE EXPRESSION: ", expression_trace[-1]
+        # print expression_trace[-1].values()
         print 'popping off the end, )'
-
-
         tokens.pop(0) # pop off ')' Popping is faster than deleting. What. 
 
         print 'returning expression tokens %r' % expression_tokens
@@ -250,8 +255,8 @@ def repl():
             val = eval(parse(user_input))
             print 'NODE LIST', expression_trace
 
-
-
+            json_expression_trace = json.dumps(expression_trace, indent=5)
+            print json_expression_trace
 
             # print 'val in the repl is %r' % val
             if val is not None:
