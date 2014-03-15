@@ -22,8 +22,6 @@ var s =
     };
 
 
-
-
 var BinaryTreeNode = function (value) {
   this.value = value;
   this.left = null;
@@ -85,7 +83,7 @@ test = function(list){
 
     if (parent.value=="lambda"){
       var lamda = parent.value;
-      var variable = new BinaryTreeNode(list[1]);
+      var variable = new BinaryTreeNode(list[1][0]);
 
       // right now, value is an object
       // var exp = new BinaryTreeNode(list[2]);
