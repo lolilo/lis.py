@@ -243,69 +243,50 @@ def repl():
         user_input = raw_input('lis.py > ')
         # able to push enter infinitely
         if user_input:
-            # json_output will later be converted to a JSON object
-            json_output = {
+            return_json(user_input)
+
+def return_json(user_input):
+
+    # user_input = user_input.replace('\r\n', ' ')
+    # need to figure this out, read multiple lines
+    # split into separate lines and feed separately into the eval function, maybe
+
+    # list of lines of code
+    user_input_lines = user_input.split('\r\n')
+    print user_input_lines
+
+    global expression_trace 
+    expression_trace = []
+    json_output = {
                 "code" : user_input, 
                 "trace" : []
                 }
 
+    for line in user_input_lines:
+        val = eval(parse(line))
+    # if val is None:
+    #     json_expression_trace = json.dumps(expression_trace, indent=5)
+    # if val is not None:
+    global_env_for_json_conversion = {}
 
+    for i in global_env.iteritems():
+        key = i[0]
+        global_env_for_json_conversion[key] = str(global_env[key])
+    
+    json_output["trace"].append(dict(global_env=global_env_for_json_conversion))
+    json_output["trace"].append(dict(expression_trace=expression_trace))
+    json_object = json.dumps(json_output, indent=5)
 
-
-
-            val = eval(parse(user_input))
-            # print 'NODE LIST', expression_trace
-
-            # if line defines a new function -- THIS IS TERRIBLE. FIX LATER.
-            if val is None:
-                # json_expression_trace is a string...
-                json_expression_trace = json.dumps(expression_trace, indent=5)
-                # print json_expression_trace
-            if val is not None:
-
-                # need JSON objects in a 'trace' list. 
-
-                # JSON notation has only a handful of native datatypes 
-                # (objects, arrays, strings, numbers, booleans, and null), 
-                # so anything serialized in JSON needs to be expressed as one of these types.
-                
-                print """
-
-                """
-
-                # convert global_env values to strings, since JSON cannot serialize functions
-                
-                # I SEE WHAT'S HAPPENING. With only one line processed at a time, it's aight. 
-                # Then I'm changing the global_env values to strings...can't eval functions anymore.
-                # The Symbols point to strings. Shiiiit. 
-
-                global_env_for_json_conversion = {}
-
-                for i in global_env.iteritems():
-                    key = i[0]
-                    global_env_for_json_conversion[key] = str(global_env[key])
-                
-                json_output["trace"].append(dict(global_env=global_env_for_json_conversion))
-                
-                # this only works if the user only puts in one line, else will append/clash with other lines
-                
-                # before this following conversion, expression_trace is a list
-                # ordered from last node to first, 
-                # well, more like, innermost expression to outermost
-                # when we turn it into a dictionary, is it necessarily still ordered?
-                json_output["trace"].append(dict(expression_trace=expression_trace))
-                json_object = json.dumps(json_output, indent=5)
-
-                # print "\n json_output! ", json_output
-                print '\n json_object! ', json_object
-                print to_string(val)
+    # print json_object
+    return json_object
+    print to_string(val)
 
 def main():
     """In case we need this for something"""
     pass
 
 if __name__ == "__main__":
-    global expression_trace, node_count 
+    global expression_trace
     expression_trace = []
     repl()
 
