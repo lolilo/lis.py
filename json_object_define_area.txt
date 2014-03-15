@@ -1,0 +1,106 @@
+{
+     "code": "(area 9)", 
+     "trace": [
+          {
+               "global_env": {
+                    "equal?": "<built-in function eq>", 
+                    "list?": "<function <lambda> at 0x7eff80041d70>", 
+                    "cons": "<function <lambda> at 0x7eff80041b90>", 
+                    ">=": "<built-in function ge>", 
+                    "<=": "<built-in function le>", 
+                    "cdr": "<function <lambda> at 0x7eff80041c80>", 
+                    "append": "<built-in function add>", 
+                    "area": "<function <lambda> at 0x7eff7ffc6320>", 
+                    "+": "<function add at 0x7eff800419b0>", 
+                    "*": "<function mul at 0x7eff80041aa0>", 
+                    "-": "<function sub at 0x7eff80041a28>", 
+                    "/": "<function div at 0x7eff80041b18>", 
+                    "=": "<built-in function eq>", 
+                    "<": "<built-in function lt>", 
+                    ">": "<built-in function gt>", 
+                    "not": "<built-in function not_>", 
+                    "symbol?": "<function <lambda> at 0x7eff80041e60>", 
+                    "eq?": "<built-in function is_>", 
+                    "car": "<function <lambda> at 0x7eff80041c08>", 
+                    "null?": "<function <lambda> at 0x7eff80041de8>", 
+                    "list": "<function <lambda> at 0x7eff80041cf8>", 
+                    "length": "<built-in function len>"
+               }
+          }, 
+          {
+               "expression_trace": [
+                    {
+                         "r": [
+                              "r"
+                         ]
+                    }, 
+                    {
+                         "*": [
+                              "*", 
+                              "r", 
+                              "r"
+                         ]
+                    }, 
+                    {
+                         "*": [
+                              "*", 
+                              3.141592653, 
+                              [
+                                   "*", 
+                                   "r", 
+                                   "r"
+                              ]
+                         ]
+                    }, 
+                    {
+                         "lambda": [
+                              "lambda", 
+                              [
+                                   "r"
+                              ], 
+                              [
+                                   "*", 
+                                   3.141592653, 
+                                   [
+                                        "*", 
+                                        "r", 
+                                        "r"
+                                   ]
+                              ]
+                         ]
+                    }, 
+
+                    // this last dict entry has info for complete tree
+                    // get this working first
+                    // print lines, one for each node level
+                    {
+                         "define": [
+                              "define", 
+                              "area", 
+                              [
+                                   "lambda", 
+                                   [
+                                        "r"
+                                   ], 
+                                   [
+                                        "*", 
+                                        3.141592653, 
+                                        [
+                                             "*", 
+                                             "r", 
+                                             "r"
+                                        ]
+                                   ]
+                              ]
+                         ]
+                    }, 
+                    // {
+                    //      "area": [
+                    //           "area", 
+                    //           9
+                    //      ]
+                    // }
+               ]
+          }
+     ]
+}

@@ -258,7 +258,7 @@ def repl():
 
             # if line defines a new function -- THIS IS TERRIBLE. FIX LATER.
             if val is None:
-
+                # json_expression_trace is a string...
                 json_expression_trace = json.dumps(expression_trace, indent=5)
                 # print json_expression_trace
             if val is not None:
@@ -289,7 +289,10 @@ def repl():
                 
                 # this only works if the user only puts in one line, else will append/clash with other lines
                 
-                # json_expression_trace is a string...
+                # before this following conversion, expression_trace is a list
+                # ordered from last node to first, 
+                # well, more like, innermost expression to outermost
+                # when we turn it into a dictionary, is it necessarily still ordered?
                 json_output["trace"].append(dict(expression_trace=expression_trace))
                 json_object = json.dumps(json_output, indent=5)
 
