@@ -63,67 +63,65 @@ var depthFirstTraversal = function (node) {
   if (node === null) {
     return;
   }
-  
+
   // need to store nodes as a list and return at the end?
   // well, we could generate images as we are traversing...
-
+  // console.log(node);
   console.log(node.value);
   depthFirstTraversal(node.getLeft());
   depthFirstTraversal(node.getRight());
-  // console.log('this is returning!');
-  // console.log(node.getValue());
-  // return node.getValue();
 };
 
 
 
-test_initial = function(s){
+createTree = function(code){
 
-  for (var key in s){
+  for (var key in code){
     // console.log(key);
     // first and only -- each object has only one key
-    dict_entry = s[key];
+    dict_entry = code[key];
     // console.log(dict_entry);
-    tree = test(dict_entry);
+    tree = createNode(dict_entry);
     
-    console.log('this is the final tree');
-    console.log(tree);
+    // console.log('this is the final tree');
+    // console.log(tree);
+    return tree;
   }
 };
 
-test = function(list){
+createNode = function(args){
 
   // single value string or int or etc.
-  if (typeof(list) != typeof([])){
-    // console.log(list);
-    return new BinaryTreeNode(list);
+  if (typeof(args) != typeof([])){
+    // console.log(args);
+    return new BinaryTreeNode(args);
   }
 
   else {
-    var parent = new BinaryTreeNode(list[0]);
+    var parent = new BinaryTreeNode(args[0]);
 
     if (parent.value=="define"){
       var define = parent.value;
-      var define_variable = new BinaryTreeNode(list[1]);
+      var define_variable = new BinaryTreeNode(args[1]);
 
-      var define_exp = list[2];
+      var define_exp = args[2];
 
       parent.setLeft(define_variable);
-      parent.left.setLeft(test(define_exp));
+      parent.left.setLeft(createNode(define_exp));
 
     }
 
     else if (parent.value=="lambda"){
       var lamda = parent.value;
-      var lambda_variable = new BinaryTreeNode(list[1][0]);
+      var lambda_variable = new BinaryTreeNode(args[1][0]);
 
       // right now, value is an object
-      // var exp = new BinaryTreeNode(list[2]);
+      // var exp = new BinaryTreeNode(args[2]);
 
-      var lambda_exp = list[2];
+      var lambda_exp = args[2];
 
       parent.setLeft(lambda_variable);
-      parent.setRight(test(lambda_exp));
+      parent.setRight(createNode(lambda_exp));
 
       // console.log(parent);
       // console.log(depthFirstTraversal(parent));
@@ -132,8 +130,8 @@ test = function(list){
     else if (parent.value=="*"){
   
       console.log();
-      var child1 = test(list[1]);
-      var child2 = test(list[2]);
+      var child1 = createNode(args[1]);
+      var child2 = createNode(args[2]);
       // console.log('the children are', eval_child1, eval_child2);
   
       parent.setLeft(child1);
@@ -142,14 +140,15 @@ test = function(list){
       // console.log(parent);
       return parent;
     }
-    // console.log();
-    // console.log('this is the final tree');
+    // return the final tree
     return parent;
   }
 
 
 };
 
-test_initial(define);
+tree = createTree(s);
+console.log(tree);
 
+depthFirstTraversal(tree);
 
