@@ -27,26 +27,38 @@ var BinaryTreeNode = function (value) {
   this.left = null;
   this.right = null;
 
-  this.get_left = function () {
+  this.getLeft = function () {
     return this.left;
   };
 
-  this.get_right = function () {
+  this.getRight = function () {
     return this.right;
   };
 
-  this.set_left = function (node) {
+  this.setLeft = function (node) {
     this.left = node;
   };
 
-  this.set_right = function (node) {
+  this.setRight = function (node) {
     this.right = node;
   };
 
-  this.get_value = function () {
+  this.getValue = function () {
     return this.value;
   };
 };
+
+// after we set the tree up, traverse the tree to "draw" it on the frontend
+var depthFirstTraversal = function (node) {
+  if (node === null) {
+    return;
+  }
+  node.getValue();
+  depthFirstTraversal(node.getLeft());
+  depthFirstTraversal(node.getRight());
+};
+
+
 
 test_initial = function(s){
 
@@ -90,8 +102,8 @@ test = function(list){
 
       exp = list[2];
 
-      parent.set_left(variable);
-      parent.set_right(test(exp));
+      parent.setLeft(variable);
+      parent.setRight(test(exp));
 
       // console.log(exp.left.value, exp.right.value);
       console.log(parent);
@@ -104,8 +116,8 @@ test = function(list){
       var child2 = test(list[2]);
       // console.log('the children are', eval_child1, eval_child2);
   
-      parent.set_left(child1);
-      parent.set_right(child2);
+      parent.setLeft(child1);
+      parent.setRight(child2);
       // console.log('values!', parent.left.value, parent.right.value);
       // console.log(parent);
       return parent;
