@@ -9,17 +9,19 @@ var s =
                         "r"
                    ],
                    [
-                        "*",
-                        3.141592653,
-                        [
-                             "*",
-                             "r",
-                             "r"
-                        ]
+                      "*",
+                      3.141592653,
+                      [
+                           "*",
+                           "r",
+                           "r"
+                      ]
                    ]
               ]
          ]
     };
+
+
 
 
 var BinaryTreeNode = function (value) {
@@ -72,39 +74,41 @@ test_initial = function(s){
 
 test = function(list){
 
+  // single value string or int or etc.
   if (typeof(list) != typeof([])){
-    return list;
+    // console.log(list);
+    return new BinaryTreeNode(list);
   }
 
   else {
     var parent = new BinaryTreeNode(list[0]);
+
     if (parent.value=="lambda"){
       var lamda = parent.value;
-      var variable = new BinaryTreeNode(list[1][0]);
-      var exp = new BinaryTreeNode(test(list[2][0]));
-  
+      var variable = new BinaryTreeNode(list[1]);
+
+      // right now, value is an object
+      // var exp = new BinaryTreeNode(list[2]);
+
+      exp = list[2];
+
       parent.set_left(variable);
-      parent.set_right(exp);
+      parent.set_right(test(exp));
+
+      // console.log(exp.left.value, exp.right.value);
       console.log(parent);
     }
     // modify later for if first in global_env or env
     else if (parent.value=="*"){
   
       console.log();
-      // console.log('making children with this list', list);
-      var eval_child1 = test(list[1]);
-      // console.log('inbetween');
-      var eval_child2 = test(list[2]);
+      var child1 = test(list[1]);
+      var child2 = test(list[2]);
       // console.log('the children are', eval_child1, eval_child2);
-  
-      // var child1 = new BinaryTreeNode(list[1]);
-      // var child2 = new BinaryTreeNode(list[2]);
-  
-      var child1 = new BinaryTreeNode(eval_child1);
-      var child2 = new BinaryTreeNode(eval_child2);
   
       parent.set_left(child1);
       parent.set_right(child2);
+      // console.log('values!', parent.left.value, parent.right.value);
       // console.log(parent);
       return parent;
     }
