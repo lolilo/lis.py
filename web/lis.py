@@ -253,7 +253,8 @@ def return_json(user_input):
 
     # list of lines of code
     user_input_lines = user_input.split('\r\n')
-    print user_input_lines
+    # do I care about unicode? It still works...but print statements are kind of ugly.
+    print 'the lines!', user_input_lines
 
     global expression_trace 
     expression_trace = []
