@@ -71,17 +71,22 @@ test_initial = function(s){
 };
 
 test = function(list){
-  var first = list[0];
+  
+  var parent = new BinaryTreeNode(list[0]);
   // console.log(first);
-  if (first=="lambda"){
-    var lamda = first;
-    var variable = list[1][0];
-    // var exp = list[2];
-    var exp = list[2];
-    var exp_symbol = exp[0];
+  if (parent.value=="lambda"){
+    var lamda = parent.value;
+    var variable = new BinaryTreeNode(list[1][0]);
+    var exp = new BinaryTreeNode(list[2]);
+    // var exp_symbol = exp.value[0];
     
+
+    parent.set_left(variable);
+    parent.set_right(exp);
+    console.log(parent);
+
     // FIX THIS. instead of exp_symbol, test(exp) should be the second arg
-    console.log(variable, "     ", test(exp));
+    // console.log(variable, "     ", test(exp));
 
 
     // console.log("YOOOO");
@@ -91,8 +96,7 @@ test = function(list){
     // test(exp);
   }
   // modify later for if first in global_env or env
-  else if (first=="*"){
-    var parent = new BinaryTreeNode(first);
+  else if (parent.value=="*"){
     // console.log(list);
 
     console.log();
