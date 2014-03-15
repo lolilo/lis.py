@@ -72,7 +72,7 @@ test_initial = function(s){
 
 test = function(list){
   var first = list[0];
-  console.log(first);
+  // console.log(first);
   if (first=="lambda"){
     var lamda = first;
     var variable = list[1][0];
@@ -95,8 +95,12 @@ test = function(list){
     var parent = new BinaryTreeNode(first);
     // console.log(list);
 
-    // var eval_child1 = test(list[1]);
-    // var eval_child2 = test(list[2]);
+    console.log();
+    console.log('making children with this list', list);
+    var eval_child1 = test(list[1]);
+    console.log('inbetween');
+    var eval_child2 = test(list[2]);
+    console.log('the children are', eval_child1, eval_child2);
 
     var child1 = new BinaryTreeNode(list[1]);
     var child2 = new BinaryTreeNode(list[2]);
@@ -105,15 +109,10 @@ test = function(list){
     parent.set_right(child2);
     // console.log(parent);
     return parent;
+  }
 
-
-    // var first_arg = list[0];
-    // var second_arg = list[1];
-
-    // var tuple = (first_arg, second_arg);
-    // console.log('this is a tuple', tuple);
-    // return (first_arg, second_arg);
-    // console.log(first_arg, "      ", second_arg);
+  else {
+    return list;
   }
 
 
