@@ -6,4 +6,29 @@
         <input type="submit" class="btn btn-lg btn-primary btn-block" value="Submit">
     </form>
 
+
+
+
+    <script src="/static/convert_json_to_tree_object.js"></script>
+
+    <script type="text/javascript">
+
+        var s =
+                    {
+                         "*": [
+                              "*",
+                              9,
+                              8
+                         ]
+                    };
+
+        tree = createTree(s);
+        console.log('this is tree', tree);
+
+        n = depthFirstTraversal(tree);
+        // console.log(n);
+        
+    </script>
+
+
     {% endblock %}

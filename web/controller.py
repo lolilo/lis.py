@@ -21,7 +21,9 @@ def code_submitted():
     print user_input
     if user_input:
         json_object = lis.return_json(user_input)
-        print json_object
+        # print json_object
+
+
     # return redirect(url_for("index"))
     # display JSON in browswer 
     return render_template("tree.html", json_object=json_object)
