@@ -1,4 +1,4 @@
-var s =
+var define =
     {
          "define": [
               "define",
@@ -20,6 +20,16 @@ var s =
               ]
          ]
     };
+
+var s =
+                    {
+                         "*": [
+                              "*",
+                              9,
+                              8
+                         ]
+                    };
+
 
 
 var BinaryTreeNode = function (value) {
@@ -70,22 +80,14 @@ var depthFirstTraversal = function (node) {
 test_initial = function(s){
 
   for (var key in s){
-
-    // (define var exp)
-    if (key=="define"){
-
-      define_list = s[key];
-      var variable = define_list[1];
-      var exp = define_list[2];
-
-      console.log(key);
-      console.log(variable);
-
-      test(exp);
-      // for (var i in s_list){
-      //   console.log(s_list[i]);
-      // }
-    }
+    // console.log(key);
+    // first and only -- each object has only one key
+    dict_entry = s[key];
+    // console.log(dict_entry);
+    tree = test(dict_entry);
+    
+    console.log('this is the final tree');
+    console.log(tree);
   }
 };
 
@@ -100,21 +102,31 @@ test = function(list){
   else {
     var parent = new BinaryTreeNode(list[0]);
 
-    if (parent.value=="lambda"){
+    if (parent.value=="define"){
+      var define = parent.value;
+      var define_variable = new BinaryTreeNode(list[1]);
+
+      var define_exp = list[2];
+
+      parent.setLeft(define_variable);
+      parent.left.setLeft(test(define_exp));
+
+    }
+
+    else if (parent.value=="lambda"){
       var lamda = parent.value;
-      var variable = new BinaryTreeNode(list[1][0]);
+      var lambda_variable = new BinaryTreeNode(list[1][0]);
 
       // right now, value is an object
       // var exp = new BinaryTreeNode(list[2]);
 
-      exp = list[2];
+      var lambda_exp = list[2];
 
-      parent.setLeft(variable);
-      parent.setRight(test(exp));
+      parent.setLeft(lambda_variable);
+      parent.setRight(test(lambda_exp));
 
-      // console.log(exp.left.value, exp.right.value);
-      console.log(parent);
-      console.log(depthFirstTraversal(parent));
+      // console.log(parent);
+      // console.log(depthFirstTraversal(parent));
     }
     // modify later for if first in global_env or env
     else if (parent.value=="*"){
@@ -130,9 +142,14 @@ test = function(list){
       // console.log(parent);
       return parent;
     }
+    // console.log();
+    // console.log('this is the final tree');
+    return parent;
   }
+
+
 };
 
-test_initial(s);
+test_initial(define);
 
 
